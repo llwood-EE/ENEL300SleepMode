@@ -43,17 +43,16 @@ int main(void) {
             PORTA.INTFLAGS = 0b10000000;
             
             //while the sensor is low, and a minute hasn't elapsed, wait here
-            while(PORTA.IN ^ 0b10000000 && time < SMALL_DELAY)
+            while(PORTA.IN ^ 0b10000000 && time <= LARGE_DELAY){
                 time +=1;
             
             //if 60 seconds passes and the sensor is still low, turn off the electromagnet and wait until a high input from the sensor while continuing to count how long the sensor has been low for
-            while(PORT.IN ^ 0b10000000){
-                PORTA.OUT = 0b00000000;
-                time +=1;
-                
+                if (time == SMALL_DELAY)
+                    PORTA.OUT = 0b00000000;
+                    
+        
                 //if the sensor stays low for 4 extra minutes, enter sleep mode
                 if (time >= LARGE_DELAY){
-                    
                     time = 0;
                     
                     //This function executes multiple sleep related fucntions at one, it calls sleep_enable(), then sleep_cpu(), and then once the device wakes, it calls sleep_disable().
@@ -61,8 +60,10 @@ int main(void) {
                     
                     //we configured pin 7 to generate an interrupt on the rising edge of the motion sensor output. if the motion sensor goes high at this point, an interrupt will be generated setting the PORTA.INTFLAG for bit 7 to 1, this will wake the device, and then the INTFLAG bit must be reset
                     PORTA.INTFLAGS = 0b10000000;
-                }
-            }
-        }
+      
+ }
     }
+    }
+   }
+  }
 }
