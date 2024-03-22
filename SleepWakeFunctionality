@@ -24,8 +24,8 @@ int main(void) {
     // This determines the sleep mode the AVR will go into, we will be using the IDLE mode
     set_sleep_mode(SLEEP_MODE_IDLE);
 
-    // Enable pin (PA0) as an output, and (PD2) to be an input for the motion sensor, feel free to change the pins I chose, I just randomly chose so I could finish up the code
-    PORTA.DIRSET = 0b00000001;
+    // Enable pin (PD7) as an output, and (PD2) to be an input for the motion sensor, feel free to change the pins I chose, I just randomly chose so I could finish up the code
+    PORTD.DIRSET = 0b10000000;
     PORTD.DIRCLR = 0b00000100;
     
         
@@ -37,7 +37,7 @@ int main(void) {
         // If the sensor is high, this evaluates to true
         if(PORTD.IN & 0b00000100)
             //set the pin that controls the electromagnet to high (just picked PA1 because unsure which pin is actually being used to drive the electromagnet)
-            PORTA.OUT = 0b00000001;
+            PORTD.OUT = 0b10000000;
         
         // If the sensor is low this evaluates to true    
         else{
@@ -50,7 +50,7 @@ int main(void) {
             
                 // If 60 seconds passes and the sensor is still low, turn off the electromagnet
                 if (time >= SMALL_DELAY)
-                    PORTA.OUT = 0b00000000;
+                    PORTD.OUT = 0b00000000;
                     
         
                 // If the sensor stays low for 5 minutes, enter sleep mode
