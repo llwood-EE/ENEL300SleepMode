@@ -49,12 +49,12 @@ int main(void) {
                 time +=1;
             
             //if 60 seconds passes and the sensor is still low, turn off the electromagnet
-                if (time == SMALL_DELAY)
+                if (time >= SMALL_DELAY)
                     PORTA.OUT = 0b00000000;
                     
         
                 //if the sensor stays low for 5 minutes, enter sleep mode
-                if (time == LARGE_DELAY){
+                if (time >= LARGE_DELAY){
                     time = 0;
                     
                     //This function executes multiple sleep related fucntions at once, it calls sleep_enable(), then sleep_cpu(), and then once the device wakes, it calls sleep_disable().
