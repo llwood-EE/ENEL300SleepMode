@@ -24,7 +24,8 @@ int main(void) {
     // This determines the sleep mode the AVR will go into, we will be using the IDLE mode
     set_sleep_mode(SLEEP_MODE_IDLE);
 
-    // Enable a pin (PA7) to be an input for the motion sensor, feel free to change the pins I chose, I just randomly chose so I could finish up the code
+    // Enable pin (PA0) as an output, and (PA7) to be an input for the motion sensor, feel free to change the pins I chose, I just randomly chose so I could finish up the code
+    PORTA.DIRSET = 0b00000001;
     PORTA.DIRCLR = 0b10000000;
     
         
