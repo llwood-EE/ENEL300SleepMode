@@ -17,16 +17,16 @@ int main(void) {
 
 
     // Setting bit 6 to '1' selects TTL Level voltage threshold for input reads and interrupt conditions. Bits 2:0 determine what condition an interrupt gets generated (rising edge)
-    PORTA.PIN7CTRL = 0b01000010;
-    // This clears any previous interrupts generated for pin PA7
-    PORTA.INTFLAGS = 0b10000000;
+    PORTD.PIN2CTRL = 0b01000010;
+    // This clears any previous interrupts generated for pin PD2
+    PORTD.INTFLAGS = 0b00000100;
 
     // This determines the sleep mode the AVR will go into, we will be using the IDLE mode
     set_sleep_mode(SLEEP_MODE_IDLE);
 
-    // Enable pin (PA0) as an output, and (PA7) to be an input for the motion sensor, feel free to change the pins I chose, I just randomly chose so I could finish up the code
+    // Enable pin (PA0) as an output, and (PD2) to be an input for the motion sensor, feel free to change the pins I chose, I just randomly chose so I could finish up the code
     PORTA.DIRSET = 0b00000001;
-    PORTA.DIRCLR = 0b10000000;
+    PORTD.DIRCLR = 0b00000100;
     
         
     while (1) {
@@ -35,17 +35,17 @@ int main(void) {
         time = 0;
 
         // If the sensor is high, this evaluates to true
-        if(PORTA.IN & 0b10000000)
+        if(PORTD.IN & 0b00000100)
             //set the pin that controls the electromagnet to high (just picked PA1 because unsure which pin is actually being used to drive the electromagnet)
             PORTA.OUT = 0b00000001;
         
         // If the sensor is low this evaluates to true    
         else{
             // Clear any previous interrupts (interrupts only generated on the rising edge of motion sensor output)
-            PORTA.INTFLAGS = 0b10000000;
+            PORTD.INTFLAGS = 0b00000100;
             
             // While the sensor is low, and 5 minutes hasn't elapsed, wait here
-            while(PORTA.IN ^ 0b10000000 && time <= LARGE_DELAY){
+            while(PORTD.IN ^ 0b00000100 && time <= LARGE_DELAY){
                 time +=1;
             
                 // If 60 seconds passes and the sensor is still low, turn off the electromagnet
@@ -62,7 +62,7 @@ int main(void) {
                     
                     // We configured pin 7 to generate an interrupt on the rising edge of the motion sensor output. if the motion sensor goes high at this point, an interrupt will be generated setting the PORTA.INTFLAG for bit 7 to 1, this will wake the device, and then the INTFLAG bit must be reset
                     // The code resumes right after the call to sleep mode
-                    PORTA.INTFLAGS = 0b10000000;
+                    PORTD.INTFLAGS = 0b00000100;
       
       }
      }
