@@ -42,7 +42,7 @@ int main(void) {
             //clear any previous interrupts (interrupts only generated on the rising edge of motion sensor output)
             PORTA.INTFLAGS = 0b10000000;
             
-            //while the sensor is low, and a minute hasn't elapsed, wait here
+            //while the sensor is low, and 5 minutes hasn't elapsed, wait here
             while(PORTA.IN ^ 0b10000000 && time <= LARGE_DELAY){
                 time +=1;
             
@@ -51,8 +51,8 @@ int main(void) {
                     PORTA.OUT = 0b00000000;
                     
         
-                //if the sensor stays low for 4 extra minutes, enter sleep mode
-                if (time >= LARGE_DELAY){
+                //if the sensor stays low for5 minutes, enter sleep mode
+                if (time == LARGE_DELAY){
                     time = 0;
                     
                     //This function executes multiple sleep related fucntions at one, it calls sleep_enable(), then sleep_cpu(), and then once the device wakes, it calls sleep_disable().
