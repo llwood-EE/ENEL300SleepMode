@@ -34,39 +34,39 @@ int main(void) {
         // Reset timer
         time = 0;
 
-        //if the sensor is high, this evaluates to true
+        // If the sensor is high, this evaluates to true
         if(PORTA.IN & 0b10000000)
             //set the pin that controls the electromagnet to high (just picked PA1 because unsure which pin is actually being used to drive the electromagnet)
             PORTA.OUT = 0b00000001;
         
-        //if the sensor is low this evaluates to true    
+        // If the sensor is low this evaluates to true    
         else{
-            //clear any previous interrupts (interrupts only generated on the rising edge of motion sensor output)
+            // Clear any previous interrupts (interrupts only generated on the rising edge of motion sensor output)
             PORTA.INTFLAGS = 0b10000000;
             
-            //while the sensor is low, and 5 minutes hasn't elapsed, wait here
+            // While the sensor is low, and 5 minutes hasn't elapsed, wait here
             while(PORTA.IN ^ 0b10000000 && time <= LARGE_DELAY){
                 time +=1;
             
-            //if 60 seconds passes and the sensor is still low, turn off the electromagnet
+                // If 60 seconds passes and the sensor is still low, turn off the electromagnet
                 if (time >= SMALL_DELAY)
                     PORTA.OUT = 0b00000000;
                     
         
-                //if the sensor stays low for 5 minutes, enter sleep mode
+                // If the sensor stays low for 5 minutes, enter sleep mode
                 if (time >= LARGE_DELAY){
                     time = 0;
                     
-                    //This function executes multiple sleep related fucntions at once, it calls sleep_enable(), then sleep_cpu(), and then once the device wakes, it calls sleep_disable().
+                    // This function executes multiple sleep related fucntions at once, it calls sleep_enable(), then sleep_cpu(), and then once the device wakes, it calls sleep_disable().
                     sleep_mode();
                     
-                    //we configured pin 7 to generate an interrupt on the rising edge of the motion sensor output. if the motion sensor goes high at this point, an interrupt will be generated setting the PORTA.INTFLAG for bit 7 to 1, this will wake the device, and then the INTFLAG bit must be reset
-                    //the code resumes right after the call to sleep mode
+                    // We configured pin 7 to generate an interrupt on the rising edge of the motion sensor output. if the motion sensor goes high at this point, an interrupt will be generated setting the PORTA.INTFLAG for bit 7 to 1, this will wake the device, and then the INTFLAG bit must be reset
+                    // The code resumes right after the call to sleep mode
                     PORTA.INTFLAGS = 0b10000000;
       
- }
-    }
+      }
+     }
     }
    }
   }
-}
+ }
